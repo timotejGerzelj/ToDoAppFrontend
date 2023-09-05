@@ -48,20 +48,20 @@ export class TaskService {
     );
   }
 
-  updateTask(task: Task): Observable<Task> {
-    const url = `${this.apiUrl}/${task.id}`;
-    return this.http.put<Task>(url, task).pipe(
+  updateTask(updatedTask: Task): Observable<Task> {
+    const url = `${this.apiUrl}/${updatedTask.id}`;
+    console.log(updatedTask);
+    return this.http.put<Task>(url, updatedTask).pipe(
       catchError((error) => {
-        console.error('Update Error:', error);
-        throw error; // Rethrow the error to propagate it to the component
+        console.error('Edit Error:', error);
+        throw error;
       }),
-      tap((updatedTask) => {
-        // When the PUT request is successful, update the corresponding task in the existing tasks
+      tap(() => {
         const currentTasks = this.tasksSubject.value;
-        const taskIndex = currentTasks.findIndex((t) => t.id === updatedTask.id);
-        if (taskIndex !== -1) {
-          currentTasks[taskIndex] = updatedTask;
-          this.tasksSubject.next(currentTasks);
+        const updatedIndex = currentTasks.findIndex((task) => task.id === updatedTask.id);
+        if (updatedIndex !== -1) {
+          currentTasks[updatedIndex] = updatedTask;
+          this.tasksSubject.next([...currentTasks]);
         }
       })
     );

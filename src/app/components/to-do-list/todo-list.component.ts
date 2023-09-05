@@ -12,37 +12,62 @@ import { TaskService } from 'src/app/services/task.service';
 export class TodoListComponent {
   tasks$: Observable<Task[]>;
   searchTerm: string = '';
-
+  currentSortColumn: string = 'id';
+  currentSortOrder: 'asc' | 'desc' = 'desc';
+  isAscending: boolean = true;
   constructor(private taskService: TaskService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.taskService.getAllTasks();
     this.tasks$ = this.taskService.tasks$;
-  }
-
-  editTask(task: Task): void {
-    console.log(task);
-    // Implement edit logic (e.g., navigate to edit page with task ID)
+    this.sortTasks('id');
   }
 
   deleteTask(taskId: number): void {
     this.taskService.deleteTask(taskId).subscribe(
       () => {
         console.log('Delete successful');
-        // The tasks$ observable automatically updates in the service, so no need to update it here
       },
       (error) => {
         console.error('Delete failed:', error);
-        // Handle the error (e.g., show an error message)
       }
     );
   }
+  sortTasks(column: string): void {
+  if (this.currentSortColumn === column) {
+    this.currentSortOrder = this.currentSortOrder === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.currentSortColumn = column;
+    this.currentSortOrder = 'asc';
+  }
+    this.tasks$ = this.tasks$.pipe(map((tasks) => this.sortTasksArray(tasks)));
+  }
+  private sortTasksArray(tasks: Task[]): Task[] {
+    if (this.currentSortColumn === 'id') {
+      return tasks.sort((a, b) => {
+        const compareResult = this.currentSortOrder === 'asc' ? a.id - b.id : b.id - a.id;
+        return compareResult;
+      });
+    } else if (this.currentSortColumn === 'title') {
+      return tasks.sort((a, b) => {
+        const compareResult = a.naslov.localeCompare(b.naslov);
+        return this.currentSortOrder === 'asc' ? compareResult : -compareResult;
+      });
+      } 
+    else if (this.currentSortColumn === 'desc') {
+      return tasks.sort((a, b) => {
+        const compareResult = a.opis.localeCompare(b.opis);
+        return this.currentSortOrder === 'asc' ? compareResult : -compareResult;
+      });
 
+    }
+    return tasks;
+  }
   searchTasks(): void {
     console.log("Searching ... ", this.searchTerm); 
-
     if (this.searchTerm.trim() === '') {
       // If the search text is empty, reset the task list
+      this.tasks$ = this.taskService.tasks$;
     } else {
       // Filter tasks based on the search text
       console.log("Searching ..."); 

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Import necessary modules
-import { ActivatedRoute } from '@angular/router';
-import { map, take } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Task } from 'src/app/models/task.model';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -11,28 +10,32 @@ import { TaskService } from 'src/app/services/task.service';
   styleUrls: ['./task-form.component.css']
 })
 export class TaskFormComponent {
-  task: Task ; // Initialize with an empty object
-  @Output() onSubmit = new EventEmitter<Task>(); // Output event
+  task: Task;
+  @Output() onSubmit = new EventEmitter<Task>();
   isDisabled: boolean = false;
 
-  taskForm: FormGroup; // Define the form as a FormGroup
-  naslovValue: string = ''; // Variable to hold the 'naslov' value
-  opisValue: string = '';   
-  constructor(private fb: FormBuilder, private taskService: TaskService, private route: ActivatedRoute) {
-  }
+  taskForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private taskService: TaskService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
   ngOnInit(): void {
     this.taskForm = this.fb.group({
-      naslov: ['', Validators.required],
-      opis: ['', Validators.required]
-        });
-    console.log(this.taskForm.valid);
+      naslov: ['', [Validators.required]],
+      opis: ['', [Validators.required]]
+    });
+
     this.route.params.subscribe((params) => {
       const taskId = +params['id'];
       if (taskId) {
         this.taskService.findTaskById(taskId).subscribe((task) => {
           if (task) {
             this.task = task;
-            this.taskForm.patchValue({
+            this.taskForm.setValue({
               naslov: task.naslov,
               opis: task.opis
             });
@@ -48,42 +51,50 @@ export class TaskFormComponent {
 
   initializeNewTask(): void {
     this.task = {
-      id: -1, // Assign a unique ID or set it to 0 for a new task
+      id: -1,
       naslov: '',
       opis: '',
-      datumUstvarjanja: new Date(), // Set to the current date/time or the desired default date
-      opravljeno: false, // Initial completion status
+      datumUstvarjanja: new Date(),
+      opravljeno: false
     };
   }
+  navigateToRoot(): void {
+    this.router.navigate(['/']);
+  }
   onTaskSubmit(): void {
-    console.log(this.taskForm.valid)
     if (this.taskForm.valid) {
-      console.log(this.task);
-      if (this.task.id != -1){
-          console.log("edit")
-        }
-      
-      else {
-        const updatedTask: Task = {
-           id: 0, // Make sure to include the task ID
-           naslov: this.taskForm.get('naslov')!.value,
-           opis: this.taskForm.get('opis')!.value,
-           datumUstvarjanja: new Date(),
-           opravljeno: false
-        };
-  
-        this.taskService.createTask(updatedTask).subscribe(
-          (createdTask) => {
-            // Handle the response here
-            console.log('Task created:', createdTask);
+      if (this.task.id != -1) {
+        this.task.naslov = this.taskForm.value.naslov;
+        this.task.opis = this.taskForm.value.opis;
+
+        this.taskService.updateTask(this.task).subscribe(
+          (updatedTask) => {
+            console.log('Task updated:', updatedTask);
+            this.navigateToRoot();
           },
           (error) => {
-            // Handle error
+            console.error('Error updating task:', error);
+          }
+        );
+      } else {
+        const updatedTask: Task = {
+          id: 0,
+          naslov: this.taskForm.value.naslov,
+          opis: this.taskForm.value.opis,
+          datumUstvarjanja: new Date(),
+          opravljeno: false
+        };
+
+        this.taskService.createTask(updatedTask).subscribe(
+          (createdTask) => {
+            console.log('Task created:', createdTask);
+            this.navigateToRoot();
+          },
+          (error) => {
             console.error('Error creating task:', error);
           }
         );
-          }
-        }
-
       }
+    }
   }
+}

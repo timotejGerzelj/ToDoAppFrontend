@@ -1,8 +1,13 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
-/* Style for table headers */
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
 .table-header {
     background-color: #939393;
     font-weight: bold;
+
+  }
+  .clickable {
+    cursor: pointer;
   }
   
   /* Style for the table and its elements */

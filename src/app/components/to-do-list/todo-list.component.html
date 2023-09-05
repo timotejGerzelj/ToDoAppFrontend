@@ -1,7 +1,6 @@
 <div class="container">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div>
-        
           <div class="input-group">
             <input
               type="text"
@@ -11,7 +10,7 @@
               name="searchTerm"
             />
             <button class="btn btn-outline-secondary" (click)="searchTasks()">
-              <i class="bi bi-search"></i> <!-- Bootstrap Icons search icon -->
+                <i class="bi bi-search"></i>
             </button>
           </div>
         </div>
@@ -23,12 +22,12 @@
    
       <table class="table table-bordered">
         <thead class="table-header table-secondary">
-          <tr>
-            <th scope="col" class="col title">#</th>
-            <th scope="col" >Title</th>
-            <th scope="col">Desc</th>
-            <th scope="col">Status</th>
-            <th scope="col">Actions</th>
+          <tr >
+            <th (click)="sortTasks('id')" class="clickable col title">#</th>
+            <th (click)="sortTasks('title')" class="clickable">Title</th>
+            <th (click)="sortTasks('desc')" class="clickable">Desc</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -36,7 +35,7 @@
             <td>{{ task.id }}</td>
             <td>{{ task.naslov }}</td>
             <td>{{ task.opis }}</td>
-            <td>{{ task.opravljeno }}</td>
+            <td>{{ task.opravljeno ? 'Done' : 'ToDo' }}</td>
             <td *ngIf="!task.opravljeno">
               <button class="btn btn-success">Done</button>
               <button [routerLink]="['/task-form', task.id]" class="btn btn-primary">Edit</button>
@@ -45,5 +44,4 @@
           </tr>
         </tbody>
       </table>
-    
   </div>

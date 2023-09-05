@@ -12,6 +12,6 @@
       <div class="text-danger">Opis required</div>
     </div>
     <button [disabled]="!taskForm.valid" type="submit">{{ task.id > -1 ? 'Edit' : 'Add' }}</button>
-    <button routerLink="/">Cancel</button>
+    <button (click)="navigateToRoot()">Cancel</button>
   </form>
 </div>

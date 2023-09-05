@@ -1,0 +1,17 @@
+<div class="form-box">
+  <h2>{{ task.id > -1 ? 'Edit' : 'Add' }} Todo</h2>
+  <form [formGroup]="taskForm" (ngSubmit)="onTaskSubmit()">
+    <label for="naslov">Naslov:</label>
+    <input required type="text" id="naslov" formControlName="naslov"/>
+    <div *ngIf="taskForm.get('naslov')?.invalid && taskForm.get('naslov')?.touched">
+      <div class="text-danger">Naslov required</div>
+    </div>
+    <label for="opis">Opis:</label>
+    <input required type="text" id="opis" formControlName="opis" />
+    <div *ngIf="taskForm.get('opis')?.invalid && taskForm.get('opis')?.touched">
+      <div class="text-danger">Opis required</div>
+    </div>
+    <button [disabled]="!taskForm.valid" type="submit">{{ task.id > -1 ? 'Edit' : 'Add' }}</button>
+    <button routerLink="/">Cancel</button>
+  </form>
+</div>

@@ -9,12 +9,9 @@
   .clickable {
     cursor: pointer;
   }
-  
-  /* Style for the table and its elements */
   .table-bordered {
     border: 1px solid #ddd; /* Add borders to create a box-like appearance */
   }
-  
   .table tr, .table th, .table td {
     border: 1px solid #ddd; /* Add borders to create a box-like appearance */
   }

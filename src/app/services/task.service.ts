@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, map, tap } from 'rxjs';
 import { Task } from '../models/task.model';
-
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-  private apiUrl = 'http://localhost:5265/api/Task'; // Replace with your API URL
+  private apiUrl = 'http://localhost:5265/api/Task';
 
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   tasks$ = this.tasksSubject.asObservable();
@@ -84,4 +83,25 @@ export class TaskService {
       })
     );
   }
-}
+  markTaskDone(doneTask: Task): Observable<void>{
+    const url = `${this.apiUrl}/opravljeno/${doneTask.id}`;
+    return this.http.put<void>(url, doneTask).pipe(
+      catchError((error) => {
+        console.error('Edit Error:', error);
+        throw error;
+      }),
+      tap(() => {
+        const currentTasks = this.tasksSubject.value;
+        const updatedIndex = currentTasks.findIndex((task) => task.id === doneTask.id);
+        if (updatedIndex !== -1) {
+          currentTasks[updatedIndex].opravljeno = true;
+          this.tasksSubject.next([...currentTasks]);
+        }
+      })
+    );
+
+  }
+
+
+  }
+

@@ -1,27 +1,44 @@
-# TodoList
+# Angular Task Management App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.1.
+A simple Angular front-end application for Comland ToDoApp challenge!
 
-## Development server
+## Table of Contents
+- [Motivation](#motivation)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Running the Application](#running-the-application)
+- [Features](#features)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Motivation 
 
-## Code scaffolding
+This project was created as a working week challenge as part of an interview proces, the application is a classic ToDo application with 2 parts, Bootstrap Angular front-end and C# dotnet Entity Core back-end. This part is to demonstrate my competence with the Angular framework and basic styling with Bootstrap.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Prerequisites
 
-## Build
+- Node.js and npm installed on your machine.
+- Angular CLI (Command Line Interface) installed globally.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Getting Started
 
-## Running unit tests
+### Installation
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. Clone this repository:
+2. `cd todo-list`
+3. `npm install`
 
-## Running end-to-end tests
+### Running the Application
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+1. Run the ToDoList Backend application, 
+2. Set the API url for to the URL on which your Backend is running on 
+3. ng serve (running on http://localhost:4200/
+)
 
-## Further help
+## Features
+- Creation, editing, and deletion of tasks as well as marking them as done.
+- Sorting tasks by column.
+- Searching for tasks by title or description.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## License
+
+MIT

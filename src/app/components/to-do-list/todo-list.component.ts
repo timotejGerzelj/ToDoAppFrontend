@@ -33,9 +33,19 @@ export class TodoListComponent {
       }
     );
   }
+  markTaskAsDone(task: Task): void{
+    this.taskService.markTaskDone(task).subscribe(
+      (updatedTask) => {
+        console.log('Task updated:', updatedTask);
+      },
+      (error) => {
+        console.error('Error updating task:', error);
+      }
+    );
+  }
   sortTasks(column: string): void {
   if (this.currentSortColumn === column) {
-    this.currentSortOrder = this.currentSortOrder === 'asc' ? 'desc' : 'asc';
+    this.currentSortOrder = this.currentSortOrder === 'desc' ? 'asc' : 'desc';
   } else {
     this.currentSortColumn = column;
     this.currentSortOrder = 'asc';
@@ -66,10 +76,8 @@ export class TodoListComponent {
   searchTasks(): void {
     console.log("Searching ... ", this.searchTerm); 
     if (this.searchTerm.trim() === '') {
-      // If the search text is empty, reset the task list
       this.tasks$ = this.taskService.tasks$;
     } else {
-      // Filter tasks based on the search text
       console.log("Searching ..."); 
       this.tasks$ = this.taskService.tasks$.pipe(
         map((tasks) =>
@@ -80,5 +88,6 @@ export class TodoListComponent {
         )
       );
     }
+
   }
 }

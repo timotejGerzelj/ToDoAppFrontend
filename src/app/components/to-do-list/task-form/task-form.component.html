@@ -11,7 +11,9 @@
     <div *ngIf="taskForm.get('opis')?.invalid && taskForm.get('opis')?.touched">
       <div class="text-danger">Opis required</div>
     </div>
-    <button [disabled]="!taskForm.valid" type="submit">{{ task.id > -1 ? 'Edit' : 'Add' }}</button>
-    <button (click)="navigateToRoot()">Cancel</button>
+  <div class="d-flex justify-content-center justify-content-md-start">
+    <button class="me-2" [disabled]="!taskForm.valid" type="submit">{{ task.id > -1 ? 'Edit' : 'Add' }}</button>
+    <button class="me-2" (click)="navigateToRoot()">Cancel</button>
+  </div>
   </form>
 </div>

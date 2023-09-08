@@ -24,7 +24,7 @@ This project was created as a working week challenge as part of an interview pro
 ### Installation
 
 1. Clone this repository:
-2. `cd todo-list`
+2. `cd ToDoAppFrontend`
 3. `npm install`
 
 ### Running the Application

@@ -13,7 +13,7 @@ export class TaskFormComponent {
   task: Task;
   @Output() onSubmit = new EventEmitter<Task>();
   isDisabled: boolean = false;
-
+  
   taskForm: FormGroup;
 
   constructor(
@@ -29,9 +29,11 @@ export class TaskFormComponent {
       opis: ['', [Validators.required]]
     });
 
+    // Fetch the task details based on the route parameters.
     this.route.params.subscribe((params) => {
       const taskId = +params['id'];
       if (taskId) {
+        // If taskId is provided, try to find and load an existing task.
         this.taskService.findTaskById(taskId).subscribe((task) => {
           if (task) {
             this.task = task;
@@ -40,15 +42,18 @@ export class TaskFormComponent {
               opis: task.opis
             });
           } else {
+            // Initialize a new task if the task with taskId doesn't exist.
             this.initializeNewTask();
           }
         });
       } else {
+        // Initialize a new task if no taskId is provided in the route.
         this.initializeNewTask();
       }
     });
   }
 
+  // Initialize a new task with default values.
   initializeNewTask(): void {
     this.task = {
       id: -1,
@@ -58,9 +63,13 @@ export class TaskFormComponent {
       opravljeno: false
     };
   }
+
+  // Navigate back to the root page.
   navigateToRoot(): void {
     this.router.navigate(['/']);
   }
+
+  // Handle the form submission (create or update a task).
   onTaskSubmit(): void {
     if (this.taskForm.valid) {
       if (this.task.id != -1) {
@@ -77,6 +86,7 @@ export class TaskFormComponent {
           }
         );
       } else {
+        // Create a new task.
         const updatedTask: Task = {
           id: 0,
           naslov: this.taskForm.value.naslov,

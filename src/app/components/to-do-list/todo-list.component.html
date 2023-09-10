@@ -1,18 +1,21 @@
 <div class="container">
   <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3 gap-3">
     <div class="flex-grow-1">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search tasks..."
-          [(ngModel)]="searchTerm"
-          name="searchTerm"
-        />
-        <button class="btn btn-outline-secondary btn-sm" (click)="searchTasks()">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
+      <form [formGroup]="searchBar" (ngSubmit)="searchTasks()">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search tasks..."
+            formControlName="searchTerm"
+            name="searchTerm"
+          />
+          <button type="submit" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
     </div>
     <div class="mt-3 mt-md-0">
       <button routerLink="/task-form" class="btn btn-success btn-block btn-md-auto">Add New Task</button>
@@ -24,11 +27,17 @@
     <table class="table table-bordered" *ngIf="tasks$ | async as tasks;">
       <thead class="table-header table-secondary">
         <tr>
-          <th (click)="sortTasks('id')" class="clickable col-2 col-md-1">#</th>
-          <th (click)="sortTasks('title')" class="clickable col-4 col-md-3">Title</th>
-          <th (click)="sortTasks('desc')" class="clickable col-4 col-md-3">Desc</th>
-          <th class="col-2 col-md-2">Status</th>
-          <th class="col-12 col-md-3">Actions</th>
+          <th tabindex="0" (click)="sortTasks('id')" class="clickable col-2 col-md-1">#
+            {{ currentSortColumn === 'id' ? (currentSortOrder === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+          <th tabindex="0" (click)="sortTasks('title')" class="clickable col-4 col-md-3">Title
+            {{ currentSortColumn === 'title' ? (currentSortOrder === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+          <th tabindex="0" (click)="sortTasks('desc')" class="clickable col-4 col-md-3">Desc
+            {{ currentSortColumn === 'desc' ? (currentSortOrder === 'asc' ? '↑' : '↓') : '' }}
+          </th>
+          <th tabindex="0" class="col-2 col-md-2">Status</th>
+          <th tabindex="0" class="col-12 col-md-3">Actions</th>
         </tr>
       </thead>
       <tbody>
